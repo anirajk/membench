@@ -63,7 +63,8 @@ main(int argc, const char** argv)
     double mbs = s * nThreads / 1024 / 1024;
     std::cout << nThreads << " Threads" << std::endl
 	      << ms << " ms" << std::endl
-              << mbs << " MB" << std::endl
+              << mbs *2 << " MB Allocated" << std::endl
+              << mbs << " MB Touched" << std::endl
               << mbs / (ms / 1000.) << " MB/s" << std::endl;
     return 0;
 }
