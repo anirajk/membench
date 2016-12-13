@@ -1,4 +1,5 @@
 CXXFLAGS := -std=c++14 -O3 -Idocopt.cpp -Wall -Werror
+#CXXFLAGS := -std=c++14 -g -Idocopt.cpp -Wall -Werror
 LDFLAGS := -lpthread
 
 SRCS := $(wildcard *.cc)
