@@ -1,0 +1,1 @@
+sleep 2;./mem-bench --mode read --threads=10;sleep 2

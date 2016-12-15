@@ -16,10 +16,11 @@ R"(mem-bench
 
    Basic Memory Bandwidth measurements over 2 arrays
    Usage:
-     mem-bench [--threads=T] [--size=S] [--mode=m]
+     mem-bench [--threads=T] [--size=S] [--mode=m] [--verbose]
 
    Options:
      -h --help            Show this screen
+     --verbose            Show more verbose output
      --threads=T          Number of threads [default: 2] 
      --size=S             Size of each array in MB [default: 512]
      --mode=m             Mode (read,write,assign,memcpy) [default: all]
@@ -33,12 +34,18 @@ main(int argc, const char** argv)
                          { argv + 1, argv + argc },
                          true,               // show help if requested
                          "mem-bench 0.2");
-    std::cout<<"args"<<std::endl;
-    for (auto const& arg : args) {
-        std::cerr << arg.first <<  " " << arg.second << std::endl;
-    }
     const size_t nThreads = args["--threads"].asLong();
     const size_t s = 1024 * 1024 * args["--size"].asLong();
+    const bool verbose = bool(args["--verbose"])&&
+			 args["--verbose"].asBool();
+    const char *strmodes[] =
+    {
+     "read",
+     "write",
+     "assign",
+     "memcpy",
+     "all"
+    };
     //const size_t s = 3llu * 1024 * 1024 * 1024;
     //size_t nThreads = 4;
     std::atomic<size_t> nReady{};
@@ -118,9 +125,11 @@ main(int argc, const char** argv)
       mbs = s * 8 * nThreads / 1024 / 1024;
     else
       mbs = s * 2 * nThreads / 1024 / 1024;
-    std::cout << nThreads << " Threads" << std::endl
-	      << ms << " ms" << std::endl
-              << mbs << " MB Touched" << std::endl
+    if(verbose)
+        std::cout << nThreads << " Threads" << std::endl
+	          << ms << " ms" << std::endl
+                  << mbs << " MB Touched" << std::endl;
+    std::cout <<"mode " << strmodes[mode] << std::endl
               << mbs / (ms / 1000.) << " MB/s" << std::endl;
     return 0;
 }
